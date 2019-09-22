@@ -26,14 +26,37 @@ public class MainActivity extends AppCompatActivity {
     public String currentPhotoPath;
     public ImageView imageView;
     public Bitmap bitmap;
-    String directory = Environment.getExternalStorageDirectory() + "/Android/data/com.example.comp7082.comp7082photogallery/files/Pictures/";
-    String[] filenames;
+    public int currentIndex = 0;
+    public String directory = Environment.getExternalStorageDirectory() + "/Android/data/com.example.comp7082.comp7082photogallery/files/Pictures/";
+    public String[] filenames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.imageView);
+
+        getFilenames(directory);
+        if(filenames != null) {
+            currentPhotoPath = directory + filenames[currentIndex];
+        }
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            if(currentPhotoPath != null){
+                createPicture(currentPhotoPath);
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    private void getFilenames(String directory){
+        File path = new File(directory);
+        if (path.exists()) {
+            filenames = path.list();
+        }
     }
 
     public void onSnapClicked(View view){
