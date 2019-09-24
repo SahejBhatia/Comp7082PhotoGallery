@@ -127,4 +127,11 @@ public class MainActivity extends AppCompatActivity {
 
         bitmap = BitmapFactory.decodeFile(filepath, bmOptions);
     }
+
+    // Search methods
+    public void openSearchOnClick(View view){
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+
+    }
 }
