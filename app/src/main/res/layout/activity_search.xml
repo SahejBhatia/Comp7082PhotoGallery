@@ -39,7 +39,7 @@
         android:text="@string/searchText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText8" />
+        app:layout_constraintTop_toBottomOf="@+id/fromTimeEditText" />
 
     <TextView
         android:id="@+id/tagSearchPromptTextView"
@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText6"
+        android:id="@+id/fromDateEditText"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -60,13 +60,13 @@
         android:ems="10"
         android:hint="@string/dateSearchTextHint"
         android:inputType="date"
-        app:layout_constraintEnd_toStartOf="@+id/editText7"
+        app:layout_constraintEnd_toStartOf="@+id/toDateEditText"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchPromptFrom" />
 
     <EditText
-        android:id="@+id/editText7"
+        android:id="@+id/toDateEditText"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -74,10 +74,10 @@
         android:ems="10"
         android:hint="@string/dateSearchTextHint"
         android:inputType="date"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editText6"
+        app:layout_constraintBaseline_toBaselineOf="@+id/fromDateEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editText6" />
+        app:layout_constraintStart_toEndOf="@+id/fromDateEditText" />
 
     <TextView
         android:id="@+id/searchPromptFrom"
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/searchDatePromptFrom"
-        app:layout_constraintStart_toStartOf="@+id/editText6"
+        app:layout_constraintStart_toStartOf="@+id/fromDateEditText"
         app:layout_constraintTop_toBottomOf="@+id/dateSearchPromptTextView" />
 
     <TextView
@@ -94,10 +94,10 @@
         android:layout_height="wrap_content"
         android:text="@string/searchDatepromptTo"
         app:layout_constraintBaseline_toBaselineOf="@+id/searchPromptFrom"
-        app:layout_constraintStart_toStartOf="@+id/editText7" />
+        app:layout_constraintStart_toStartOf="@+id/toDateEditText" />
 
     <EditText
-        android:id="@+id/editText8"
+        android:id="@+id/fromTimeEditText"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -105,13 +105,13 @@
         android:ems="10"
         android:hint="@string/timeSearchTextHint"
         android:inputType="time"
-        app:layout_constraintEnd_toStartOf="@+id/editText9"
+        app:layout_constraintEnd_toStartOf="@+id/toTimeEditText"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText6" />
+        app:layout_constraintTop_toBottomOf="@+id/fromDateEditText" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/toTimeEditText"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -122,7 +122,7 @@
         android:inputType="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editText8"
-        app:layout_constraintTop_toBottomOf="@+id/editText7" />
+        app:layout_constraintStart_toEndOf="@+id/fromTimeEditText"
+        app:layout_constraintTop_toBottomOf="@+id/toDateEditText" />
 
 </android.support.constraint.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.comp7082.comp7082photogallery;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -22,15 +23,23 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
     implements GestureDetector.OnGestureListener
 {
+    // Tag names for Intent Extra Info
+    public static final String EXTRA_PHOTO_LIST = "com.example.comp7082.comp7082photogallery.PHOTO_LIST";
+    public static final String EXTRA_CURRENT_INDEX = "com.example.comp7082.comp7082photogallery.CURRENT_INDEX";
+
     private static final float MIN_FLING_DISTANCE = 200.0f;
     private static final float MAX_FLING_DISTANCE = 1000.0f;
 
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_IMAGE_SEARCH = 2;
     public String currentPhotoPath;
     public ImageView imageView;
     public Bitmap bitmap;
@@ -39,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     public String[] filenames;
 
     private GestureDetector gestureScanner;
+    private Random rand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +58,11 @@ public class MainActivity extends AppCompatActivity
         imageView = findViewById(R.id.imageView);
 
         getFilenames(directory);
-        if(filenames != null) {
+        if(filenames != null && filenames.length > 0) {
             currentPhotoPath = directory + filenames[currentIndex];
         }
+
+        rand = new Random();
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -103,12 +115,40 @@ public class MainActivity extends AppCompatActivity
             // update gallery list
             getFilenames(directory);
             currentIndex = filenames.length - 1;
+
+            // exif data test
+            // search development use - needs to be removed once tag functionality is in place
+            try {
+                String mString = getCommentTags();
+                ExifInterface exif;
+                exif = new ExifInterface(currentPhotoPath);
+                exif.setAttribute("UserComment", mString); // or "ImageDescription"
+                exif.setAttribute("ImageDescription", filenames[currentIndex]); // or "ImageDescription"
+                exif.saveAttributes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // end test
+
+        }
+        if (requestCode == REQUEST_IMAGE_SEARCH && resultCode == RESULT_OK) {
+            filenames = data.getStringArrayExtra(MainActivity.EXTRA_PHOTO_LIST);
+
+            if (filenames == null) {
+                getFilenames(directory);
+            }
+            currentIndex = 0;
+
+            currentPhotoPath = directory + filenames[currentIndex];
+            createPicture(currentPhotoPath);
+            imageView.setImageBitmap(bitmap);
+
         }
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -147,7 +187,10 @@ public class MainActivity extends AppCompatActivity
     // Search methods
     public void openSearchOnClick(View view){
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
+        getFilenames(directory);    // ensure we send the whole list each time
+        intent.putExtra(EXTRA_PHOTO_LIST, filenames);
+        intent.putExtra(EXTRA_CURRENT_INDEX, currentIndex);
+        startActivityForResult(intent, REQUEST_IMAGE_SEARCH);
 
     }
 
@@ -217,6 +260,22 @@ public class MainActivity extends AppCompatActivity
         Log.d("scrollGallery :", "currentPhotoPath = " + currentPhotoPath);
         createPicture(currentPhotoPath);
         imageView.setImageBitmap(bitmap);
+    }
+
+    // development method only
+    // search development use - needs to be removed once tag functionality is in place
+    private String getCommentTags() {
+        String[] words = { "stove", "sink", "dog", "books", "kitchen", "dishwasher", "table", "chairs", "tv"};
+        String tags = "";
+        int stop = rand.nextInt(3) + 1;
+
+        for (int i = 0; i < stop ; i ++) {
+            tags += words[rand.nextInt(words.length)];
+            if (i < stop -1) {
+                tags += " ";
+            }
+        }
+        return tags;
     }
 
     @Override
