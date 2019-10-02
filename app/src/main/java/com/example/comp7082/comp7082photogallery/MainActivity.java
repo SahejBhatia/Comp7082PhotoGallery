@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity
     // Tag names for Intent Extra Info
     public static final String EXTRA_PHOTO_LIST = "com.example.comp7082.comp7082photogallery.PHOTO_LIST";
     public static final String EXTRA_CURRENT_INDEX = "com.example.comp7082.comp7082photogallery.CURRENT_INDEX";
+    public static final String EXIF_SEARCH_TAG = ExifInterface.TAG_MAKER_NOTE;
+    public static final String EXIF_CAPTION_TAG = ExifInterface.TAG_USER_COMMENT;
 
     private static final float MIN_FLING_DISTANCE = 200.0f;
     private static final float MAX_FLING_DISTANCE = 1000.0f;
@@ -120,10 +122,11 @@ public class MainActivity extends AppCompatActivity
             // search development use - needs to be removed once tag functionality is in place
             try {
                 String mString = getCommentTags();
+                String mCaption = getCaptionComment(mString);
                 ExifInterface exif;
                 exif = new ExifInterface(currentPhotoPath);
-                exif.setAttribute("UserComment", mString); // or "ImageDescription"
-                exif.setAttribute("ImageDescription", filenames[currentIndex]); // or "ImageDescription"
+                exif.setAttribute(EXIF_SEARCH_TAG, mString);
+                exif.setAttribute(EXIF_CAPTION_TAG, mCaption);
                 exif.saveAttributes();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -276,6 +279,22 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return tags;
+    }
+
+    private String getCaptionComment(String keys) {
+
+        String[] keyTokens = keys.split(" ");
+
+        StringBuilder caption = new StringBuilder();
+
+        caption.append("The apartment showing the ");
+        for (int i = 0; i < keyTokens.length; i++) {
+            caption.append(keyTokens[i]);
+            if (keyTokens.length > 1 && i < keyTokens.length -1 ) {
+                caption.append(", and the ");
+            }
+        }
+        return caption.toString();
     }
 
     @Override

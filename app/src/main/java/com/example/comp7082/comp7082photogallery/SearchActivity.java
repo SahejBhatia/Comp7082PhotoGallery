@@ -217,7 +217,7 @@ public class SearchActivity extends AppCompatActivity {
             String path = directory + imageFileName;
             ExifInterface exif = new ExifInterface(path);
 
-            fileUserComment = exif.getAttribute(ExifInterface.TAG_USER_COMMENT); // resolves to a String
+            fileUserComment = exif.getAttribute(MainActivity.EXIF_SEARCH_TAG); // resolves to a String
             //String fileImageDescription = exif.getAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION); // resolves to a String
 
             String[] fileNameTokens =  imageFileName.split("_");    // parse the date and time from the filename
